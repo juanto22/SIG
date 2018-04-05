@@ -6,14 +6,6 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui" template="/template/layout.xhtml">
 
-	<ui:define name="head">
-
-	</ui:define>
-
-	<ui:define name="subheader">
-		<h:outputText value="PRUEBAS"></h:outputText>
-	</ui:define>
-
 	<ui:define name="content">
 		<h:form id="teachersForm">
 			<p:outputPanel id="contentPanel">
@@ -30,16 +22,13 @@
 						</p:menuitem>
 					</p:contextMenu>
 
-					<h2>Lista de Profesores</h2>
+					<h2>Lista de Candidatos</h2>
 					<p:separator />
 
 					<p:dataTable id="dtTeachers" widgetVar="dtTeachers" var="teacher"
 						selection="#{teacherView.teacher}" selectionMode="single"
 						value="#{teacherView.teacherLazyData}" rows="10" paginator="true"
 						paginatorPosition="bottom" lazy="true">
-						<f:facet name="header">
-			        		Lista de Profesores
-			        	</f:facet>
 
 						<p:column headerText="Nombre" filterBy="#{teacher.name}">
 			        		#{teacher.name}
