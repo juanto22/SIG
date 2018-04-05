@@ -14,6 +14,11 @@
   </context-param>
   
   <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>bootstrap</param-value>
+    </context-param>
+    
+  <context-param>
       <param-name>com.sun.faces.serializeServerState</param-name>
       <param-value>false</param-value>
   </context-param>
@@ -63,7 +68,7 @@
   </context-param>
   <context-param>
       <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
-      <param-value>-1</param-value> <!-- Should be -1 for production. -->
+      <param-value>0</param-value> <!-- Should be -1 for production. -->
   </context-param>
   <context-param>
       <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>

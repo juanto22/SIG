@@ -16,18 +16,14 @@
     </ui:define>
 
     <ui:define name="content">
-
-        <p:panel header="BIENVENIDO">
-            <p>
-                <h:outputText value="HOLA MUNDO"></h:outputText>
-            </p>
-            
-            <h:form>
-            	<p:commandButton value="Test" actionListener="#{usuarioView.testAction()}" process="@this" />
-            </h:form>
-            
-            <p:spacer height="400" />
-        </p:panel>	
+		<h:form>
+	        <p:panel header="BIENVENIDO">
+	            <p>
+	                <b>#{identity.account.userName}</b>!
+	            </p>
+	            <p:spacer height="400" />
+	        </p:panel>	
+		</h:form>
     </ui:define>
 
 </ui:composition>

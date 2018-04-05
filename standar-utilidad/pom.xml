@@ -13,12 +13,29 @@
   </parent>
   
   <dependencies>
-  
+  	
+  	<dependency>
+		<groupId>org.primefaces</groupId>
+		<artifactId>adamantium-theme</artifactId>
+		<version>2.0</version>
+	</dependency>
+	
+	<dependency>
+      <groupId>org.picketlink</groupId>
+      <artifactId>picketlink</artifactId>
+      <scope>compile</scope>
+    </dependency>
+         
 	<dependency>
 		<groupId>org.primefaces.extensions</groupId>
         <artifactId>primefaces-extensions</artifactId>
     </dependency>
     
+    <dependency>
+   		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-email</artifactId>
+   </dependency>
+   
     <dependency>
     	<groupId>org.primefaces.extensions</groupId>
         <artifactId>resources-ckeditor</artifactId>

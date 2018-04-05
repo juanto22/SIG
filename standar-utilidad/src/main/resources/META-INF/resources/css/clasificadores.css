@@ -33,83 +33,92 @@ width: auto !important;
 	display: none;
 }
 
-.claseTabla .default td{color: black !important;font-weight: normal !important}
-.claseTabla .new td{color:#00b700 !important; font-weight: normal !important}
-.claseTabla .ui-datatable .ui-state-highlight > td{color: #044b7b !important}
-.claseTabla .mod td{color:blue !important; font-weight: normal !important}
-.claseTabla .del td{color:red !important; font-weight: normal !important}
-.claseTabla td.left{text-align:left}
-.claseTabla td.center{text-align:center}
-.claseTabla .disableDisplay td{display: none !important;}
-td.ui-panelgrid-cell.property {
-    width: 30%;
+/*Sobre escritura de filtros prime*/
+.ui-datatable {
+    border: 0!important;
+    margin: 0 0 1em 0 !important;
 }
 
-#reportsForm .gridReports{
-	width: 70%;
-    text-align: center;
-    margin: auto;
+.ui-datatable-tablewrapper {
+    margin: 10px 0 !important;
 }
 
-#reportsForm .ui-tabs .ui-tabs-navscroller-btn {
+.ui-datatable .ui-column-filter {
+    height: 10px !important;
+}
+
+.ui-datalist {
+    border: 0 !important;
+}
+
+.progress ul li {
+    border: 2px solid #fff;
+    width: 25%;
+    background: #edeff0;
+    color: #000;
+    position: relative;
+  	padding: 11px 15px;
+    text-align: center!important;
+}
+
+.mis_aplicaciones ul li {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+    line-height: 21px;
+}
+
+.progress ul li.activa {
+    background: #ff5b00;
+   	color: #fff;
+}
+
+.progress ul li:before {
+    -moz-transform: scale(.9999);
+    height: 0;
+    border-top: 22px solid transparent;
+    border-left: 12px solid #fff;
+    border-bottom: 21px solid transparent;
     position: absolute;
-    height: 51px !important;
-    z-index: 100;
-    cursor: pointer;
-    display: block;
+    top: 0;
+    left: 0;
+    z-index: 8;
+    content: "";
 }
 
-#reportsForm .ui-panelgrid {
-    border: 0;
-    background-color: #ffffff;
-    font-size: 14px;
-    font-family: 'latoregular';
+.progress ul li.activa:before {
+    background: #ff5b00;
 }
 
-#reportsForm .ui-panelgrid td{
-    border: 0;
+.progress ul li.activa .triangulo {
+    border-left: 12px solid #ff5b00;
 }
 
-#reportsForm .icon-style {
-    margin: 0 10px 0 0;
+.progress ul li .triangulo {
+    -moz-transform: scale(.9999);
+    height: 0;
+    border-top: 22px solid transparent;
+    border-left: 12px solid #edeff0;
+    border-bottom: 22px solid transparent;
+    position: absolute;
+    top: 0;
+    right: -11.9px;
+    z-index: 9;
 }
 
-#reportsForm .icon-style-first {
-    margin: 0 10px 0 25px;
+.progress ul li.first {
+    border-radius: 8px 0 0 8px; 
+    -webkit-border-radius: 8px 0 0 8px;
+    -moz-border-radius: 8px 0 0 8px;
 }
 
-#reportsForm  .bPeriodosPanel{
-    width: 50%;
+.progress ul li.last {
+    border-radius: 0 8px 8px 0;
+    -webkit-border-radius: 0 8px 8px 0;
+    -moz-border-radius: 0 8px 8px 0;
 }
 
-#reportsForm  .first{
- 	width: 65%;
-}
-
-#reportsForm  .second{
- 	width: 15%;
-}
-
-#reportsForm  .third{
- 	width: 30%;
-}
-
-#reportsForm .ejeReports {
-    width: 70%;
-    text-align: center;
-}
-
-#reportsEjecForm .ui-panelgrid {
-    border: 0;
-    background-color: #ffffff;
-    font-size: 14px;
-    font-family: 'latoregular';
-    width:100%;
-}
-
-#reportsEjecForm .ui-panelgrid .ui-panelgrid-cell {
-    border-width: 0;
-    border-style: solid;
-    border-color: inherit;
-    padding: 4px 10px;
+.question{
+	width: 35%;
+	text-align: justify;
 }

@@ -19,8 +19,8 @@
                       content="no-store,no-cache,must-revalidate" />
                 <meta http-equiv="Pragma" content="no-cache" />
                 <meta http-equiv="Expires" content="-1" />
-<!--                 <link rel="shortcut icon" type="image/x-icon" -->
-<!--                       href="#{resource['images/safi/favicon.ico']}" /> -->
+                <link rel="shortcut icon" type="image/x-icon"
+                      href="#{resource['images/safi/favicon.ico']}" />
                 <meta name="viewport"
                       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,10 +55,10 @@
         <h:body>
             <f:facet name="last">
                 <h:outputStylesheet library="css" name="title.css" />
-                <h:outputStylesheet library="css" name="adjust.css" />
+<!--                 <h:outputStylesheet library="css" name="adjust.css" /> -->
                 <!--<link rel="stylesheet" href="http://localhost/estilos/adjust.css" type="text/css" />-->
             </f:facet>
-            <p:growl id="message" sticky="true" showDetail="true"
+            <p:growl id="message" sticky="false" showDetail="true"
                      autoUpdate="true" globalOnly="true"  />
 
             <ui:include src="/include/topbar.xhtml" />
