@@ -1,0 +1,6 @@
+#ignore
+
+.settings
+/standar-comun/settings/
+/standar-utilidad/.settings/
+standar-web/.settings/

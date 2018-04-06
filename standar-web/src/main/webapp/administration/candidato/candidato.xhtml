@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template/layout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="candidatoForm">
+			<p:outputPanel id="contentPanel">
+				<p:outputPanel id="panelList" rendered="#{!candidatoView.renderEditView}">
+
+					<p:contextMenu id="ctxMascotas" for="candidatoForm:dtCandidatos">
+						<p:menuitem value="Editar" icon="fa fa-pencil"
+							action="#{candidatoView.prepareUpdate}"
+							update="candidatoForm:contentPanel" />
+						<p:menuitem value="Eliminar" icon="fa fa-trash"
+							action="#{candidatoView.delete}" update="candidatoForm:dtCandidatos">
+							<p:confirm header="Eliminacion"
+								message="Desea eliminar este registro?" />
+						</p:menuitem>
+					</p:contextMenu>
+
+					<h2>Listado de Candidatos</h2>
+					<p:separator />
+
+					<p:dataTable id="dtCandidatos" widgetVar="dtCandidatos" var="candidato"
+						selection="#{candidatoView.candidato}" selectionMode="single"
+						value="#{candidatoView.candidatoLazyData}" rows="10" paginator="true"
+						paginatorPosition="bottom" lazy="true">
+
+						<p:column headerText="Nombre" filterBy="#{teacher.name}">
+			        		#{candidato.persona.nombres}
+			        	</p:column>
+
+						<p:column headerText="Apellidos" filterBy="#{teacher.lastName}">
+			        		#{candidato.persona.apellidos}
+			        	</p:column>
+
+					</p:dataTable>
+
+					<p:commandButton value="Nuevo" icon="fa fa-plus"
+						action="#{candidatoView.prepareSave}"
+						update="candidatoForm:contentPanel" />
+		
+				</p:outputPanel>
+
+				<p:outputPanel id="panelAddEdit"
+					rendered="#{candidatoView.renderEditView}">
+					<ui:include src="./registro.xhtml" />
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

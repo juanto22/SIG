@@ -121,6 +121,13 @@ public class SecurityController implements Serializable {
 		item.setCommand("#{securityController.onMenuSelect}");
 		secondSubmenu.addElement(item);
 
+		item = new DefaultMenuItem();
+		item.setValue("Candidatos");
+		item.setTarget("/administration/candidato/candidato.xhtml");
+		item.setIcon("icon-hyperlink");
+		item.setCommand("#{securityController.onMenuSelect}");
+		secondSubmenu.addElement(item);
+
 		model.addElement(secondSubmenu);
 		
 		DefaultSubMenu thirthSubmenu = new DefaultSubMenu("Administración de centros escolares");
