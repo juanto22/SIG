@@ -48,7 +48,7 @@ public class Proyecto implements BaseModelEntity<Long> {
 
 	private String descripcion;
 
-	private Long supervisor;
+	private Long supervisor;//posible objeto de empleado
 
 	private Double costo;
 

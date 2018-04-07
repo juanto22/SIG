@@ -104,22 +104,8 @@ public class SecurityController implements Serializable {
 
 		model.addElement(firstSubmenu);
 
-		DefaultSubMenu secondSubmenu = new DefaultSubMenu("Administración de alumnos y maestros");
+		DefaultSubMenu secondSubmenu = new DefaultSubMenu("Administración");
 		secondSubmenu.setIcon("icon-menu");
-
-		item = new DefaultMenuItem();
-		item.setValue("Lista de estudiantes");
-		item.setTarget("/administration/student/student.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		secondSubmenu.addElement(item);
-		
-		item = new DefaultMenuItem();
-		item.setValue("Lista de maestros");
-		item.setTarget("/administration/teacher/teacher.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		secondSubmenu.addElement(item);
 
 		item = new DefaultMenuItem();
 		item.setValue("Candidatos");
@@ -127,44 +113,22 @@ public class SecurityController implements Serializable {
 		item.setIcon("icon-hyperlink");
 		item.setCommand("#{securityController.onMenuSelect}");
 		secondSubmenu.addElement(item);
+		
+		item = new DefaultMenuItem();
+		item.setValue("Proyectos");
+		item.setTarget("/administration/proyecto/proyecto.xhtml");
+		item.setIcon("icon-hyperlink");
+		item.setCommand("#{securityController.onMenuSelect}");
+		secondSubmenu.addElement(item);
+		
+		item = new DefaultMenuItem();
+		item.setValue("Empleados");
+		item.setTarget("/administration/empleado/empleado.xhtml");
+		item.setIcon("icon-hyperlink");
+		item.setCommand("#{securityController.onMenuSelect}");
+		secondSubmenu.addElement(item);
 
 		model.addElement(secondSubmenu);
-		
-		DefaultSubMenu thirthSubmenu = new DefaultSubMenu("Administración de centros escolares");
-		thirthSubmenu.setIcon("icon-menu");
-
-		item = new DefaultMenuItem();
-		item.setValue("Lista de escuelas");
-		item.setTarget("/administration/school/list.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		thirthSubmenu.addElement(item);
-		
-
-		item = new DefaultMenuItem();
-		item.setValue("Lista de cursos");
-		item.setTarget("/administration/courses/list.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		thirthSubmenu.addElement(item);
-		
-		item = new DefaultMenuItem();
-		item.setValue("Lista de materias");
-		item.setTarget("/administration/subjects/list.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		thirthSubmenu.addElement(item);
-		
-		item = new DefaultMenuItem();
-		item.setValue("Lista de periodos escolares");
-		item.setTarget("/administration/period/list.xhtml");
-		item.setIcon("icon-hyperlink");
-		item.setCommand("#{securityController.onMenuSelect}");
-		thirthSubmenu.addElement(item);
-		
-		
-
-		model.addElement(thirthSubmenu);
 
 	}
 

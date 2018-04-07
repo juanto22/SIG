@@ -44,6 +44,8 @@ public class Persona implements BaseModelEntity<Long> {
 	private String apellidos;
 
 	private int edad;
+	
+	private String dui;
 
 	@Column
 	@Temporal(TemporalType.DATE)

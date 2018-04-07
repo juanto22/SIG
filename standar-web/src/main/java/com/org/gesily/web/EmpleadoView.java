@@ -13,8 +13,10 @@ import org.omnifaces.util.Messages;
 import org.picketlink.Identity;
 
 import com.org.gesily.model.Candidato;
+import com.org.gesily.model.Empleado;
 import com.org.gesily.model.Persona;
 import com.org.gesily.services.CandidatoService;
+import com.org.gesily.services.EmpleadoService;
 import com.org.school.enums.Gender;
 import com.org.security.service.SecurityManagedService;
 import com.org.util.web.BaseLazyModel;
@@ -26,7 +28,7 @@ import lombok.Setter;
 @ViewScoped
 @Getter
 @Setter
-public class CandidatoView implements Serializable {
+public class EmpleadoView implements Serializable {
 
 	private static final long serialVersionUID = 80351893876789L;
 
@@ -38,14 +40,21 @@ public class CandidatoView implements Serializable {
 
 	@Inject
 	private transient CandidatoService candidatoService;
+	
+	@Inject
+	private transient EmpleadoService empleadoService;
 
 	private Candidato candidato;
 	
 	private Persona persona;
+	
+	private Empleado empleado;
 
 	private List<Gender> genderList;
 
 	private BaseLazyModel<Candidato, Long> candidatoLazyData;
+	
+	private BaseLazyModel<Empleado, Long> empleadoLazyData;
 	
 	private boolean renderEditView;
 
@@ -54,40 +63,48 @@ public class CandidatoView implements Serializable {
 	public void init() {
 		renderEditView = false;
 		genderList = Arrays.asList(Gender.values());
-		loadTeachers();
+		loadLazyData();
 	}
 
-	public void loadTeachers() {
+	public void loadLazyData() {
+		empleadoLazyData = new BaseLazyModel<>(getEmpleadoService());
 		candidatoLazyData = new BaseLazyModel<>(getCandidatoService());
 	}
-
+	
+	public void prepareEmpleamiento() {
+		candidato = new Candidato();
+	}
+	
+	public void addEmpleado() {
+		Empleado empleado = new Empleado();
+		empleado.setPersona(candidato.getPersona());
+		
+		empleadoService.save(empleado);
+		Messages.create("INFO").detail("Candidato contratado").add();
+		
+	}
+	
 	public void prepareSave() {
 		renderEditView = true;
 		candidato = new Candidato();
 		persona = new Persona();
 	}
 
-	public void save() {
-		candidatoService.saveCandidato(candidato, persona);
-		Messages.create("INFO").detail("Candidato guardado exitosamente").add();
-		renderEditView = false;
-	}
-
 	public void prepareUpdate() {
 		renderEditView = true;
-		persona = candidato.getPersona();
+		persona = empleado.getPersona();
 	}
 	
 	public void update() {
-		candidatoService.saveCandidato(candidato, persona);
-		Messages.create("INFO").detail("Candidato actualizado exitosamente").add();
+		empleadoService.saveEmpleado(empleado, persona);
+		Messages.create("INFO").detail("Empleado actualizado exitosamente").add();
 		renderEditView = false;
 	}
 
 	public void delete() {
-		if (candidato != null) {
-			candidatoService.delete(candidato);
-			Messages.create("INFO").detail("Candidato eliminado exitosamente").add();
+		if (empleado != null) {
+			empleadoService.delete(empleado);
+			Messages.create("INFO").detail("Empleado eliminado exitosamente").add();
 		}
 	}
 }

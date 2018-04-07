@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template/layout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="empleadoForm">
+			<p:outputPanel id="contentPanel">
+				<p:outputPanel id="panelList"
+					rendered="#{!empleadoView.renderEditView}">
+
+					<p:contextMenu id="ctxMascotas" for="empleadoForm:dtEmpleados">
+						<p:menuitem value="Editar" icon="fa fa-pencil"
+							action="#{empleadoView.prepareUpdate}"
+							update="empleadoForm:contentPanel" />
+						<p:menuitem value="Eliminar" icon="fa fa-trash"
+							action="#{empleadoView.delete}" update="empleadoForm:dtEmpleados">
+							<p:confirm header="Eliminacion"
+								message="Desea eliminar este registro?" />
+						</p:menuitem>
+					</p:contextMenu>
+
+					<h2>Listado de empleados</h2>
+					<p:separator />
+
+					<p:dataTable id="dtEmpleados" widgetVar="dtEmpleados"
+						var="empleado" selection="#{empleadoView.empleado}"
+						selectionMode="single" value="#{empleadoView.empleadoLazyData}"
+						rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+
+						<p:column headerText="DUI" filterBy="#{empleado.persona.dui}">
+			        		#{empleado.persona.dui}
+			        	</p:column>
+
+						<p:column headerText="Nombre"
+							filterBy="#{empleado.persona.nombres}">
+			        		#{empleado.persona.nombres}
+			        	</p:column>
+
+						<p:column headerText="Apellidos"
+							filterBy="#{empleado.persona.apellidos}">
+			        		#{empleado.persona.apellidos}
+			        	</p:column>
+
+					</p:dataTable>
+
+					<p:commandButton value="Nuevo" icon="fa fa-plus"
+						oncomplete="PF('dlgAddEmleado').show();"
+						action="#{empleadoView.prepareEmpleamiento}" process="@this"
+						update="dlgAddEmleado" />
+
+				</p:outputPanel>
+
+				<p:outputPanel id="panelAddEdit"
+					rendered="#{empleadoView.renderEditView}">
+					<ui:include src="./registro.xhtml" />
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog id="dlgAddEmleado" widgetVar="dlgAddEmleado" modal="true"
+			header="Listado de candidatos" width="50%" closeOnEscape="true"
+			responsive="true" position="center">
+			<h:form id="addEmpleadoForm">
+				<p:dataTable id="dtCandidatos" widgetVar="dtCandidatos"
+					var="candidato" selection="#{empleadoView.candidato}"
+					selectionMode="single" value="#{empleadoView.candidatoLazyData}"
+					rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+
+					<p:ajax event="rowSelect" update="addEmpleadoForm:opButtonAdd" />
+
+					<p:column headerText="DUI" filterBy="#{candidato.persona.dui}">
+			        		#{candidato.persona.dui}
+			        	</p:column>
+
+					<p:column headerText="Nombre"
+						filterBy="#{candidato.persona.nombres}">
+			        		#{candidato.persona.nombres}
+			        	</p:column>
+
+					<p:column headerText="Apellidos"
+						filterBy="#{candidato.persona.apellidos}">
+			        		#{candidato.persona.apellidos}
+			        	</p:column>
+
+				</p:dataTable>
+
+				<p:outputPanel id="opButtonAdd">
+					<p:commandButton value="Registrar como empleado"
+						oncomplete="PF('dlgAddEmleado').hide();"
+						rendered="#{empleadoView.candidato ne null and empleadoView.candidato.id ne null}"
+						update="empleadoForm:dtEmpleados"
+						actionListener="#{empleadoView.addEmpleado}" />
+				</p:outputPanel>
+
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

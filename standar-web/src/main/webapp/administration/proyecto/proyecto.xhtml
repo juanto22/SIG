@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template/layout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="proyectoForm">
+			<p:outputPanel id="contentPanel">
+				<p:outputPanel id="panelList" rendered="#{!proyectoView.renderEditView}">
+
+					<p:contextMenu id="ctxMascotas" for="proyectoForm:dtProyectos">
+						<p:menuitem value="Editar" icon="fa fa-pencil"
+							action="#{proyectoView.prepareUpdate}"
+							update="proyectoForm:contentPanel" />
+						<p:menuitem value="Eliminar" icon="fa fa-trash"
+							action="#{proyectoView.delete}" update="proyectoForm:dtProyectos">
+							<p:confirm header="Eliminacion"
+								message="Desea eliminar este registro?" />
+						</p:menuitem>
+					</p:contextMenu>
+
+					<h2>Listado de Proyectos</h2>
+					<p:separator />
+
+					<p:dataTable id="dtProyectos" widgetVar="dtProyectos" var="proyecto"
+						selection="#{proyectoView.proyecto}" selectionMode="single"
+						value="#{proyectoView.proyectoLazyData}" rows="10" paginator="true"
+						paginatorPosition="bottom" lazy="true">
+
+						<p:column headerText="Nombre" filterBy="#{proyecto.nombre}">
+			        		#{proyecto.nombre}
+			        	</p:column>
+			        	
+			        	
+						<p:column headerText="Encargado" filterBy="#{proyecto.nroPersonas}">
+			        		#{proyecto.nroPersonas}
+			        	</p:column>
+
+						<p:column headerText="No. Personas requeridas" filterBy="#{proyecto.nroPersonas}">
+			        		#{proyecto.nroPersonas}
+			        	</p:column>
+			        	
+						<p:column headerText="Fecha de inicio" >
+			        		<h:outputText value="#{proyecto.fechaInicio}">
+			        			<f:convertDateTime pattern="dd/MM/yyyy" />
+			        		</h:outputText>
+			        	</p:column>
+			        	
+						<p:column headerText="Fecha de finalizacion" >
+			        		<h:outputText value="#{proyecto.fechaFin}">
+			        			<f:convertDateTime pattern="dd/MM/yyyy" />
+			        		</h:outputText>
+			        	</p:column>
+			        	
+						<p:column headerText="Municipio" >
+			        		#{proyecto.municipio.name}
+			        	</p:column>
+
+					</p:dataTable>
+
+					<p:commandButton value="Nuevo" icon="fa fa-plus"
+						action="#{proyectoView.prepareSave}"
+						update="proyectoForm:contentPanel" />
+
+					<p:commandButton value="Asignar Empleado" icon="fa fa-gears"
+						action="#{proyectoView.prepareSave}"
+						update="proyectoForm:contentPanel" />
+		
+				</p:outputPanel>
+
+				<p:outputPanel id="panelAddEdit"
+					rendered="#{proyectoView.renderEditView}">
+					<ui:include src="./registro.xhtml" />
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

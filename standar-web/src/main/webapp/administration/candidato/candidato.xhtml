@@ -30,18 +30,22 @@
 						value="#{candidatoView.candidatoLazyData}" rows="10" paginator="true"
 						paginatorPosition="bottom" lazy="true">
 
-						<p:column headerText="Nombre" filterBy="#{teacher.name}">
+						<p:column headerText="DUI" filterBy="#{candidato.persona.dui}">
+			        		#{candidato.persona.dui}
+			        	</p:column>
+
+						<p:column headerText="Nombre" filterBy="#{candidato.persona.nombres}">
 			        		#{candidato.persona.nombres}
 			        	</p:column>
 
-						<p:column headerText="Apellidos" filterBy="#{teacher.lastName}">
+						<p:column headerText="Apellidos" filterBy="#{candidato.persona.apellidos}">
 			        		#{candidato.persona.apellidos}
 			        	</p:column>
 
 					</p:dataTable>
 
 					<p:commandButton value="Nuevo" icon="fa fa-plus"
-						action="#{candidatoView.prepareSave}"
+						action="#{candidatoView.prepareSave}" process="@this"
 						update="candidatoForm:contentPanel" />
 		
 				</p:outputPanel>

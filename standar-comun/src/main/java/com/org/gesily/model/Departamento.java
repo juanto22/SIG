@@ -1,11 +1,14 @@
 package com.org.gesily.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -38,7 +41,7 @@ public class Departamento implements BaseModelEntity<Long> {
 
 	private String name;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "departamento")
-	private Municipio municipio;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "departamento")
+	private Set<Municipio> municipio;
 
 }

@@ -1,8 +1,6 @@
 package com.org.gesily.web;
 
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,23 +8,21 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Messages;
 import org.picketlink.Identity;
-import org.picketlink.idm.credential.Password;
 
+import com.org.gesily.model.Candidato;
+import com.org.gesily.model.Departamento;
+import com.org.gesily.model.Municipio;
+import com.org.gesily.model.Persona;
 import com.org.gesily.model.Proyecto;
+import com.org.gesily.services.CandidatoService;
+import com.org.gesily.services.DepartamentoService;
+import com.org.gesily.services.MunicipioService;
+import com.org.gesily.services.ProyectoService;
 import com.org.school.enums.Gender;
-import com.org.school.enums.Shift;
-import com.org.school.model.Teacher;
-import com.org.school.services.TeacherService;
-import com.org.security.enums.GroupsSecurityRolesNames;
-import com.org.security.enums.RolesSecurityNames;
-import com.org.security.identity.model.UserTypeEntity;
-import com.org.security.identity.stereotype.Group;
-import com.org.security.identity.stereotype.Role;
-import com.org.security.identity.stereotype.User;
+import com.org.school.services.MunicipalService;
 import com.org.security.service.SecurityManagedService;
 import com.org.util.web.BaseLazyModel;
 
@@ -48,107 +44,77 @@ public class ProyectoView implements Serializable {
 	private transient SecurityManagedService securityManagedService;
 
 	@Inject
-	private transient TeacherService teacherService;
+	private transient ProyectoService proyectoService;
 
-	private transient Teacher teacher;
+	@Inject
+	private transient DepartamentoService departamentoService;
 
-	private List<Gender> genderList;
-	private List<Shift> shiftList;
+	@Inject
+	private transient MunicipioService municipioService;
 
-	private BaseLazyModel<Teacher, Long> teacherLazyData;
+	private Proyecto proyecto;
+
+	private Departamento selectedDepartamento;
+	
+	private List<Departamento> departamentosList;
+	
+	private List<Municipio> municipiosList;
+
+	private BaseLazyModel<Proyecto, Long> proyectoLazyData;
+
 	private boolean renderEditView;
-
-	// security
-	private String userName;
-	private User teacherUser;
-	private String randomPassWord; // random string
-	private SecureRandom random;
-	private Group teacherGroup;
-	private Role teacherRole;
+	
+	private boolean isEdit;
 
 	@PostConstruct
 	public void init() {
 		renderEditView = false;
-
-		genderList =  Arrays.asList(Gender.values());
-		shiftList = Arrays.asList(Shift.values());
-		
-		loadTeachers();
-
-		// User
-		random = new SecureRandom();
-		teacherGroup = securityManagedService.findGroupByName(GroupsSecurityRolesNames.TEACHERS.getCode());
-		teacherRole = securityManagedService.findRoleByName(RolesSecurityNames.TEACHER.getCode());
+		loadProyectos();
 	}
 
-	public void loadTeachers() {
-		teacherLazyData = new BaseLazyModel<>(getTeacherService());
+	public void loadProyectos() {
+		proyectoLazyData = new BaseLazyModel<>(getProyectoService());
 	}
 
 	public void prepareSave() {
+		isEdit = false;
 		renderEditView = true;
-		teacher = new Teacher();
+		proyecto = new Proyecto();
+		departamentosList = departamentoService.findAll();
+	}
 
-		// security
-		userName = StringUtils.EMPTY;
-		randomPassWord = StringUtils.EMPTY;
+	public void loadMunicipios() {
+		if (selectedDepartamento == null || selectedDepartamento.getId() == null) {
+			Messages.create("ADVERTENCIA").detail("Seleccione departamento").warn().add();
+		} else {
+			municipiosList = municipioService.findByDepartamento(selectedDepartamento);
+		}
 	}
 
 	public void save() {
-		try {
-			if (teacher != null) {
-				UserTypeEntity teacherUserType = createUserForTeacher();
-				teacher.setUserTypeEntity(teacherUserType);
-				teacherService.save(teacher);
-				
-				
-				String message = "Usted ha sigo registrado."
-						+ "Su nombre de usuario es: " + userName + " clave: " + randomPassWord + " "
-								+ "No olvide cambiar su clave al ingresar al sistema.";
-				
-				System.out.println(message);
-				
-				renderEditView = false;
-				Messages.create("INFO").detail("Guardado exitosamente").add();
-			}
-		} catch (Exception e) {
-			// log
-		}
-	}
-
-	private UserTypeEntity createUserForTeacher() {
-
-		teacherUser = new User(userName);
-		teacherUser.setFirstName(teacher.getName());
-		teacherUser.setLastName(teacher.getLastName());
-		teacherUser.setEmail(teacher.getEmail());
-		teacherUser.setAddress(teacher.getAddress());
-		teacherUser.setTelephone(teacher.getCellPhone());
-
-		randomPassWord = generateRandomPass();
-		Password randomPass = new Password(randomPassWord);
-		UserTypeEntity user = new UserTypeEntity();
-		boolean areNotNullRoleAndGroup = teacherGroup != null && teacherRole != null;
-		if (areNotNullRoleAndGroup) {
-			securityManagedService.saveUser(teacherUser, randomPass, teacherGroup, teacherRole);
-			user.setId(teacherUser.getId());
-		}
-
-		return user;
-	}
-
-	private String generateRandomPass() {
-		return new BigInteger(130, random).toString(32);
+		proyectoService.save(proyecto);
+		Messages.create("INFO").detail("Proyecto registrado exitosamente").add();
+		renderEditView = false;
 	}
 
 	public void prepareUpdate() {
+		isEdit = true;
 		renderEditView = true;
+		selectedDepartamento = proyecto.getMunicipio().getDepartamento();
+		departamentosList = departamentoService.findAll();
+		loadMunicipios();
+	}
+
+	public void update() {
+		proyectoService.save(proyecto);
+		Messages.create("INFO").detail("Proyecto actualizado exitosamente").add();
+		renderEditView = false;
 	}
 
 	public void delete() {
-		if (teacher != null) {
-			teacherService.delete(teacher);
-			Messages.create("INFO").detail("Eliminado exitosamente").add();
+		if (proyecto != null) {
+			proyectoService.delete(proyecto);
+			Messages.create("INFO").detail("Proyecto eliminado exitosamente").add();
 		}
 	}
 }
