@@ -4,3 +4,8 @@
 /standar-comun/settings/
 /standar-utilidad/.settings/
 standar-web/.settings/
+
+.project
+/standar-utilidad/.project
+/standar-web/.project
+/standar-comun/.project/

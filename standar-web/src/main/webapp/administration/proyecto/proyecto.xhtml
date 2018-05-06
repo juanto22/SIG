@@ -9,7 +9,8 @@
 	<ui:define name="content">
 		<h:form id="proyectoForm">
 			<p:outputPanel id="contentPanel">
-				<p:outputPanel id="panelList" rendered="#{!proyectoView.renderEditView}">
+				<p:outputPanel id="panelList"
+					rendered="#{!proyectoView.renderEditView}">
 
 					<p:contextMenu id="ctxMascotas" for="proyectoForm:dtProyectos">
 						<p:menuitem value="Editar" icon="fa fa-pencil"
@@ -25,37 +26,47 @@
 					<h2>Listado de Proyectos</h2>
 					<p:separator />
 
-					<p:dataTable id="dtProyectos" widgetVar="dtProyectos" var="proyecto"
-						selection="#{proyectoView.proyecto}" selectionMode="single"
-						value="#{proyectoView.proyectoLazyData}" rows="10" paginator="true"
-						paginatorPosition="bottom" lazy="true">
+					<p:dataTable id="dtProyectos" widgetVar="dtProyectos"
+						var="proyecto" selection="#{proyectoView.proyecto}"
+						selectionMode="single" value="#{proyectoView.proyectoLazyData}"
+						rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+
+						<p:column headerText="Acciones">
+							<p:commandButton value="Aprobar" icon="fa fa-check"
+								update="proyectoForm:dtProyectos"
+								actionListener="#{proyectoView.aprobarProyecto(proyecto)}">
+								<p:confirm header="APROBACION"
+									message="Desea aprobar este proyecto?" />
+							</p:commandButton>
+						</p:column>
 
 						<p:column headerText="Nombre" filterBy="#{proyecto.nombre}">
 			        		#{proyecto.nombre}
 			        	</p:column>
-			        	
-			        	
-						<p:column headerText="Encargado" filterBy="#{proyecto.nroPersonas}">
+
+						<p:column headerText="Encargado"
+							filterBy="#{proyecto.nroPersonas}">
 			        		#{proyecto.nroPersonas}
 			        	</p:column>
 
-						<p:column headerText="No. Personas requeridas" filterBy="#{proyecto.nroPersonas}">
+						<p:column headerText="No. Personas requeridas"
+							filterBy="#{proyecto.nroPersonas}">
 			        		#{proyecto.nroPersonas}
 			        	</p:column>
-			        	
-						<p:column headerText="Fecha de inicio" >
-			        		<h:outputText value="#{proyecto.fechaInicio}">
-			        			<f:convertDateTime pattern="dd/MM/yyyy" />
-			        		</h:outputText>
-			        	</p:column>
-			        	
-						<p:column headerText="Fecha de finalizacion" >
-			        		<h:outputText value="#{proyecto.fechaFin}">
-			        			<f:convertDateTime pattern="dd/MM/yyyy" />
-			        		</h:outputText>
-			        	</p:column>
-			        	
-						<p:column headerText="Municipio" >
+
+						<p:column headerText="Fecha de inicio">
+							<h:outputText value="#{proyecto.fechaInicio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Fecha de finalizacion">
+							<h:outputText value="#{proyecto.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Municipio">
 			        		#{proyecto.municipio.name}
 			        	</p:column>
 
@@ -65,10 +76,6 @@
 						action="#{proyectoView.prepareSave}"
 						update="proyectoForm:contentPanel" />
 
-					<p:commandButton value="Asignar Empleado" icon="fa fa-gears"
-						action="#{proyectoView.prepareSave}"
-						update="proyectoForm:contentPanel" />
-		
 				</p:outputPanel>
 
 				<p:outputPanel id="panelAddEdit"

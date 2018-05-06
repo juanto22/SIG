@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template/layout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="proyectoForm">
+
+			<h2>Proyectos Aprobados</h2>
+			<p:separator />
+
+			<p:dataTable id="dtProyectos" widgetVar="dtProyectos" var="proyecto"
+				selection="#{gestionProyectosView.proyecto}" selectionMode="single"
+				value="#{gestionProyectosView.proyectoLazyData}" rows="10"
+				paginator="true" paginatorPosition="bottom" lazy="true">
+
+				<p:ajax event="rowSelect" update="proyectoForm" />
+
+				<p:column headerText="Nombre" filterBy="#{proyecto.nombre}">
+			        		#{proyecto.nombre}
+			        	</p:column>
+
+				<p:column headerText="Encargado" filterBy="#{proyecto.nroPersonas}">
+	        		#{proyecto.nroPersonas}
+	        	</p:column>
+
+				<p:column headerText="No. Personas requeridas"
+					filterBy="#{proyecto.nroPersonas}">
+	        		#{proyecto.nroPersonas}
+	        	</p:column>
+
+				<p:column headerText="Fecha de inicio">
+					<h:outputText value="#{proyecto.fechaInicio}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Fecha de finalizacion">
+					<h:outputText value="#{proyecto.fechaFin}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Municipio">
+	        		#{proyecto.municipio.name}
+	        	</p:column>
+
+			</p:dataTable>
+
+			<p:commandButton value="Asignar Empleado" icon="fa fa-gears"
+				rendered="#{gestionProyectosView.proyecto ne null}"
+				action="#{gestionProyectosView.prepareAsignarEmpleados}"
+				oncomplete="PF('dlgAddEmpleados').show();" />
+
+			<p:commandButton value="Ver Empleados" icon="fa fa-eye"
+				rendered="#{gestionProyectosView.proyecto ne null}"
+				action="#{gestionProyectosView.verEmpleados}"
+				oncomplete="PF('dlgVerEmpleados').show();" />
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Si" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog id="dlgAddEmpleados" widgetVar="dlgAddEmpleados"
+			header="Agregar empleados al proyecto" closeOnEscape="true"
+			responsive="true" position="center" width="60%" draggable="false"
+			modal="true">
+		</p:dialog>
+
+		<p:dialog id="dlgVerEmpleados" widgetVar="dlgVerEmpleados"
+			header="Empleados actuales en el proyecto" closeOnEscape="true"
+			responsive="true" position="center" width="60%" draggable="false"
+			modal="true">
+
+			<h:form id="empleadosForm">
+				<p:dataTable id="dtEmpleados" widgetVar="dtEmpleados" var="empleado"
+					value="#{gestionProyectosView.empleadoLazyData}" rows="10"
+					paginator="true" paginatorPosition="bottom" lazy="true">
+
+					<p:column headerText="DUI"
+						filterBy="#{empleado.empleado.persona.dui}">
+		        		#{empleado.empleado.persona.dui}
+		        	</p:column>
+
+					<p:column headerText="Nombre"
+						filterBy="#{empleado.empleado.persona.nombres}">
+		        		#{empleado.empleado.persona.nombres}
+		        	</p:column>
+
+					<p:column headerText="Apellidos"
+						filterBy="#{empleado.empleado.persona.apellidos}">
+		        		#{empleado.empleado.persona.apellidos}
+		        	</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

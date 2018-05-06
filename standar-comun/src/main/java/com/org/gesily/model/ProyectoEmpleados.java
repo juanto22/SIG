@@ -26,13 +26,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "PROYECTOS")
-@SequenceGenerator(name = "SEQ_PROYECTOS", sequenceName = "SEQ_PROYECTOS", allocationSize = 1)
+@Table(name = "PROYECTOSEMPLEADOS")
+@SequenceGenerator(name = "SEQ_PROYECTOSEMP", sequenceName = "SEQ_PROYECTOSEMP", allocationSize = 1)
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @ToString(of = { "id" })
 @Getter
 @Setter
-public class Proyecto implements BaseModelEntity<Long> {
+public class ProyectoEmpleados implements BaseModelEntity<Long> {
 
 	/**
 	 * 
@@ -40,33 +40,26 @@ public class Proyecto implements BaseModelEntity<Long> {
 	private static final long serialVersionUID = -1226746728446058616L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROYECTOS")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROYECTOSEMP")
 	@Column(nullable = false)
 	private Long id;
 
-	private String nombre;
-
-	private String descripcion;
-
-	private Long supervisor;//posible objeto de empleado
-
-	private Double costo;
-
-	private Integer nroPersonas;
-	
-	private String estado;
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date fechaIncorporacion;
 
 	@Column
 	@Temporal(TemporalType.DATE)
-	private Date fechaInicio;
+	private Date fechaBaja;
 
-	@Column
-	@Temporal(TemporalType.DATE)
-	private Date fechaFin;
-	
 	@ManyToOne
-	@JoinColumns({ @JoinColumn(name = "PERSONA_ID", referencedColumnName = "ID", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "PROYECTO_ID", referencedColumnName = "ID", nullable = false) })
 	@NotFound(action = NotFoundAction.IGNORE)
-	private Municipio municipio;
+	private Proyecto proyecto;
+
+	@ManyToOne
+	@JoinColumns({ @JoinColumn(name = "EMPLEADO_ID", referencedColumnName = "ID", nullable = false) })
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Empleado empleado;
 
 }

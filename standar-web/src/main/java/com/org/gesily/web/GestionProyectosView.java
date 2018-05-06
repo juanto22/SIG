@@ -16,12 +16,15 @@ import org.picketlink.Identity;
 
 import com.org.gesily.model.Candidato;
 import com.org.gesily.model.Departamento;
+import com.org.gesily.model.Empleado;
 import com.org.gesily.model.Municipio;
 import com.org.gesily.model.Persona;
 import com.org.gesily.model.Proyecto;
+import com.org.gesily.model.ProyectoEmpleados;
 import com.org.gesily.services.CandidatoService;
 import com.org.gesily.services.DepartamentoService;
 import com.org.gesily.services.MunicipioService;
+import com.org.gesily.services.ProyectoEmpleadosService;
 import com.org.gesily.services.ProyectoService;
 import com.org.school.enums.Gender;
 import com.org.school.services.MunicipalService;
@@ -37,7 +40,7 @@ import lombok.Setter;
 @ViewScoped
 @Getter
 @Setter
-public class ProyectoView implements Serializable {
+public class GestionProyectosView implements Serializable {
 
 	private static final long serialVersionUID = 80351893876789L;
 
@@ -54,7 +57,7 @@ public class ProyectoView implements Serializable {
 	private transient DepartamentoService departamentoService;
 
 	@Inject
-	private transient MunicipioService municipioService;
+	private transient ProyectoEmpleadosService proyectoEmpleadosService;
 
 	private Proyecto proyecto;
 
@@ -65,6 +68,8 @@ public class ProyectoView implements Serializable {
 	private List<Municipio> municipiosList;
 
 	private BaseLazyModel<Proyecto, Long> proyectoLazyData;
+	
+	private BaseLazyModel<ProyectoEmpleados, Long> empleadoLazyData;
 
 	private boolean renderEditView;
 	
@@ -84,56 +89,26 @@ public class ProyectoView implements Serializable {
 	public Set<ValueHolder> where() {
 		Set<ValueHolder> filters = new HashSet<>();
 		
-		filters.add(new ValueHolder("estado", OperationType.EQ.getCode(), "SEGUIMIENTO"));
+		filters.add(new ValueHolder("estado", OperationType.EQ.getCode(), "APROBADO"));
+		
+		return filters;
+	}
+	
+	public void prepareAsignarEmpleados() {
+		
+	}
+	
+	public void verEmpleados() {
+		empleadoLazyData = new BaseLazyModel<>(getProyectoEmpleadosService());
+		empleadoLazyData.addCustomFilters(whereEmpleados());
+	}
+	
+	public Set<ValueHolder> whereEmpleados() {
+		Set<ValueHolder> filters = new HashSet<>();
+		
+		filters.add(new ValueHolder("proyecto.id", OperationType.EQ.getCode(), proyecto.getId()));
 		
 		return filters;
 	}
 
-	public void prepareSave() {
-		isEdit = false;
-		renderEditView = true;
-		proyecto = new Proyecto();
-		departamentosList = departamentoService.findAll();
-	}
-
-	public void loadMunicipios() {
-		if (selectedDepartamento == null || selectedDepartamento.getId() == null) {
-			Messages.create("ADVERTENCIA").detail("Seleccione departamento").warn().add();
-		} else {
-			municipiosList = municipioService.findByDepartamento(selectedDepartamento);
-		}
-	}
-
-	public void save() {
-		proyecto.setEstado("SEGUIMIENTO");
-		proyectoService.save(proyecto);
-		Messages.create("INFO").detail("Proyecto registrado exitosamente").add();
-		renderEditView = false;
-	}
-
-	public void prepareUpdate() {
-		isEdit = true;
-		renderEditView = true;
-		selectedDepartamento = proyecto.getMunicipio().getDepartamento();
-		departamentosList = departamentoService.findAll();
-		loadMunicipios();
-	}
-
-	public void update() {
-		proyectoService.save(proyecto);
-		Messages.create("INFO").detail("Proyecto actualizado exitosamente").add();
-		renderEditView = false;
-	}
-
-	public void delete() {
-		if (proyecto != null) {
-			proyectoService.delete(proyecto);
-			Messages.create("INFO").detail("Proyecto eliminado exitosamente").add();
-		}
-	}
-	
-	public void aprobarProyecto(Proyecto proyecto) {
-		proyecto.setEstado("APROBADO");
-		getProyectoService().save(proyecto);
-	}
 }

@@ -114,12 +114,27 @@ public class SecurityController implements Serializable {
 		item.setCommand("#{securityController.onMenuSelect}");
 		secondSubmenu.addElement(item);
 		
+		DefaultSubMenu proyectosMenu = new DefaultSubMenu("Administración de Proyectos");
+		proyectosMenu.setIcon("fa fa-folder-open");
+		
 		item = new DefaultMenuItem();
-		item.setValue("Proyectos");
+		item.setValue("Proyectos en seguimiento");
 		item.setTarget("/administration/proyecto/proyecto.xhtml");
 		item.setIcon("icon-hyperlink");
 		item.setCommand("#{securityController.onMenuSelect}");
-		secondSubmenu.addElement(item);
+		
+		proyectosMenu.addElement(item);
+		
+		item = new DefaultMenuItem();
+		item.setValue("Proyectos Aprobados");
+		item.setTarget("/administration/proyecto/proyectosAprobados.xhtml");
+		item.setIcon("icon-hyperlink");
+		item.setCommand("#{securityController.onMenuSelect}");
+		
+		proyectosMenu.addElement(item);
+
+		secondSubmenu.addElement(proyectosMenu);
+		
 		
 		item = new DefaultMenuItem();
 		item.setValue("Empleados");
