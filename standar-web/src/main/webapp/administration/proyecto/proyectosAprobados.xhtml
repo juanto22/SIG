@@ -53,12 +53,12 @@
 			<p:commandButton value="Asignar Empleado" icon="fa fa-gears"
 				rendered="#{gestionProyectosView.proyecto ne null}"
 				action="#{gestionProyectosView.prepareAsignarEmpleados}"
-				oncomplete="PF('dlgAddEmpleados').show();" />
+				update="dlgAddEmpleados" oncomplete="PF('dlgAddEmpleados').show();" />
 
 			<p:commandButton value="Ver Empleados" icon="fa fa-eye"
 				rendered="#{gestionProyectosView.proyecto ne null}"
 				action="#{gestionProyectosView.verEmpleados}"
-				oncomplete="PF('dlgVerEmpleados').show();" />
+				update="dlgVerEmpleados" oncomplete="PF('dlgVerEmpleados').show();" />
 
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 				<p:commandButton value="Si" type="button"
@@ -72,6 +72,38 @@
 			header="Agregar empleados al proyecto" closeOnEscape="true"
 			responsive="true" position="center" width="60%" draggable="false"
 			modal="true">
+
+			<h:form id="empleadosForm">
+				<p:dataTable id="dtEmpleados" var="empleado"
+					selection="#{gestionProyectosView.empleadosForProyecto}"
+					value="#{gestionProyectosView.empleadosLazyData}" rows="10"
+					paginator="true" paginatorPosition="bottom" lazy="true">
+
+					<p:column selectionMode="multiple" />
+
+					<p:column headerText="DUI" filterBy="#{empleado.persona.dui}">
+		        		#{empleado.persona.dui}
+		        	</p:column>
+
+					<p:column headerText="Nombre"
+						filterBy="#{empleado.persona.nombres}">
+		        		#{empleado.persona.nombres}
+		        	</p:column>
+
+					<p:column headerText="Apellidos"
+						filterBy="#{empleado.persona.apellidos}">
+		        		#{empleado.persona.apellidos}
+		        	</p:column>
+
+				</p:dataTable>
+
+				<p:commandButton value="Asociar" icon="fa fa-save"
+					actionListener="#{gestionProyectosView.asociarEmpleados}"
+					oncomplete="handleSubmit(xhr, status, args, 'dlgAddEmpleados')">
+					<p:confirm header="Asociar Empleados"
+						message="Seguro de asociar los empleados seleccionados al proyecto?" />
+				</p:commandButton>
+			</h:form>
 		</p:dialog>
 
 		<p:dialog id="dlgVerEmpleados" widgetVar="dlgVerEmpleados"
@@ -79,8 +111,8 @@
 			responsive="true" position="center" width="60%" draggable="false"
 			modal="true">
 
-			<h:form id="empleadosForm">
-				<p:dataTable id="dtEmpleados" widgetVar="dtEmpleados" var="empleado"
+			<h:form id="empleadosProyectoForm">
+				<p:dataTable id="dtEmpleadosPro" var="empleado"
 					value="#{gestionProyectosView.empleadoLazyData}" rows="10"
 					paginator="true" paginatorPosition="bottom" lazy="true">
 

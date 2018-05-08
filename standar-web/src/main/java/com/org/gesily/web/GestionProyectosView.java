@@ -1,7 +1,9 @@
 package com.org.gesily.web;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.picketlink.Identity;
 
@@ -23,6 +26,7 @@ import com.org.gesily.model.Proyecto;
 import com.org.gesily.model.ProyectoEmpleados;
 import com.org.gesily.services.CandidatoService;
 import com.org.gesily.services.DepartamentoService;
+import com.org.gesily.services.EmpleadoService;
 import com.org.gesily.services.MunicipioService;
 import com.org.gesily.services.ProyectoEmpleadosService;
 import com.org.gesily.services.ProyectoService;
@@ -59,20 +63,27 @@ public class GestionProyectosView implements Serializable {
 	@Inject
 	private transient ProyectoEmpleadosService proyectoEmpleadosService;
 
+	@Inject
+	private transient EmpleadoService empleadoService;
+
 	private Proyecto proyecto;
 
 	private Departamento selectedDepartamento;
-	
+
 	private List<Departamento> departamentosList;
-	
+
 	private List<Municipio> municipiosList;
 
 	private BaseLazyModel<Proyecto, Long> proyectoLazyData;
-	
+
 	private BaseLazyModel<ProyectoEmpleados, Long> empleadoLazyData;
 
+	private BaseLazyModel<Empleado, Long> empleadosLazyData;
+
+	private List<Empleado> empleadosForProyecto;
+
 	private boolean renderEditView;
-	
+
 	private boolean isEdit;
 
 	@PostConstruct
@@ -85,30 +96,52 @@ public class GestionProyectosView implements Serializable {
 		proyectoLazyData = new BaseLazyModel<>(getProyectoService());
 		proyectoLazyData.addCustomFilters(where());
 	}
-	
+
 	public Set<ValueHolder> where() {
 		Set<ValueHolder> filters = new HashSet<>();
-		
+
 		filters.add(new ValueHolder("estado", OperationType.EQ.getCode(), "APROBADO"));
-		
+
 		return filters;
 	}
-	
+
 	public void prepareAsignarEmpleados() {
-		
+		empleadosLazyData = new BaseLazyModel<>(getEmpleadoService());
 	}
-	
+
 	public void verEmpleados() {
 		empleadoLazyData = new BaseLazyModel<>(getProyectoEmpleadosService());
 		empleadoLazyData.addCustomFilters(whereEmpleados());
 	}
-	
+
 	public Set<ValueHolder> whereEmpleados() {
 		Set<ValueHolder> filters = new HashSet<>();
-		
+
 		filters.add(new ValueHolder("proyecto.id", OperationType.EQ.getCode(), proyecto.getId()));
-		
+
 		return filters;
+	}
+
+	public void asociarEmpleados() {
+		List<ProyectoEmpleados> proyectoEmpleados = new ArrayList<>();
+		ProyectoEmpleados proyectoEmpleado;
+		for (Empleado empleado : empleadosForProyecto) {
+			proyectoEmpleado = new ProyectoEmpleados();
+			proyectoEmpleado.setProyecto(proyecto);
+			proyectoEmpleado.setEmpleado(empleado);
+			proyectoEmpleado.setFechaIncorporacion(new Date());
+
+			proyectoEmpleados.add(proyectoEmpleado);
+		}
+
+		try {
+			proyectoEmpleadosService.save(proyectoEmpleados);
+			Messages.create("ASOCIACION EMPLEADOS").detail("Asociacion realizada exitosamente").add();
+		} catch (Exception e) {
+			Messages.create("ERROR").detail(e.getMessage()).error().add();
+			Faces.validationFailed();
+		}
+
 	}
 
 }
