@@ -101,7 +101,7 @@ public class EmpleadoView implements Serializable {
 		renderEditView = false;
 	}
 
-	public void delete() {
+	public void delete(Empleado empleado) {
 		if (empleado != null) {
 			empleadoService.delete(empleado);
 			Messages.create("INFO").detail("Empleado eliminado exitosamente").add();
